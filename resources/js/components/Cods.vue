@@ -2,8 +2,8 @@
   <div>
     <h1>LISTS</h1>
 
-    <div class="" v-for="(cords, index) in coordinates" :key="index">
-      <h3>{{ [cords.TrackNumber, cords.WGSLat, cords.WGSLong]}}</h3>
+    <div class="" v-for="(coords, index) in coordinates" :key="index">
+      <h3>{{ [coords.TrackNumber, coords.WGSLat, coords.WGSLong] }}</h3>
       <hr />
      
     </div>
