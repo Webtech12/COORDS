@@ -1852,87 +1852,66 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   // name: 'google-map',
-  props: ['name'],
+  props: ["name"],
   data: function data() {
     return {
       map: null,
       tileLayer: null,
-      layers: [{
-        id: 0,
-        name: 'Flights',
-        active: false,
-        features: [{
-          id: 0,
-          name: 'Bogart\'s Smokehouse',
-          type: 'marker',
-          coords: [24.68, 55.36]
-        }, {
-          id: 1,
-          name: 'Pappy\'s Smokehouse',
-          type: 'marker',
-          coords: [25.05, 51.29]
-        }]
-      }]
+      greenIcon: null,
+      coords: [],
+      coordinates: [],
+      info: {
+        TargetId: null // SSR: null,
+        // FlightLevel: null,
+        // TrackNumber: null,
+
+      }
     };
   },
   mounted: function mounted() {
     this.initMap();
-    this.initLayers();
+    this.fetchCoordinates();
   },
   methods: {
     initMap: function initMap() {
-      this.map = L.map('map').setView([25.252777, 55.364445], 12);
-      this.tileLayer = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager/{z}/{x}/{y}.png', {
+      this.map = L.map("map").setView([25.252777, 55.364445], 12);
+      this.tileLayer = L.tileLayer("https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager/{z}/{x}/{y}.png", {
         maxZoom: 18,
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attribution">CARTO</a>'
       });
       this.tileLayer.addTo(this.map);
-    },
-    initLayers: function initLayers() {
-      this.layers.forEach(function (layer) {
-        // Initialize the layer
-        // console.log('works');
-        var markerFeatures = layer.features.filter(function (feature) {
-          return feature.type === 'marker';
-        });
-        console.log(layer);
-        markerFeatures.forEach(function (feature) {
-          feature.leafletObject = L.marker(feature.coords).bindPopup(feature.name);
-        });
+      this.greenIcon = L.icon({
+        iconUrl: "https://www.flyariana.com/content/filebank?id=165cca3f-18d3-47ed-9a13-d3517b5ace98",
+        iconSize: [27, 25],
+        // size of the icon
+        iconAnchor: [22, 94],
+        // point of the icon which will correspond to marker's location
+        popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
+
       });
     },
-    layerChanged: function layerChanged(layerId, active) {
+    fetchCoordinates: function fetchCoordinates() {
       var _this = this;
 
-      //   alert('sdsd');
-      var layer = this.layers.find(function (layer) {
-        return layer.id === layerId;
-      });
-      layer.features.forEach(function (feature) {
-        /* Show or hide the feature depending on the active argument */
-        if (active) {
-          feature.leafletObject.addTo(_this.map);
-        } else {
-          feature.leafletObject.removeFrom(_this.map);
-        }
+      axios.get("api/getCoordinates").then(function (res) {
+        _this.coordinates = res.data; // console.log(this.coordinates);
+
+        _this.coordinates.forEach(function (layer) {
+          _this.info.TargetId = layer.TargetId; // this.info.SSR = layer.SSR;
+          // this.info.FlightLevel = layer.FlightLevel;
+          // this.info.TrackNumber = layer.TrackNumber;
+
+          _this.coords[0] = "".concat(layer.WGSLat);
+          _this.coords[1] = "".concat(layer.WGSLong); // console.log(this.coords);
+
+          layer.leafletObject = L.marker(_this.coords, {
+            icon: _this.greenIcon
+          }).addTo(_this.map).bindPopup("".concat(_this.info.TargetId));
+        });
+      })["catch"](function (err) {
+        console.log(err);
       });
     }
   }
@@ -2088,7 +2067,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".map[data-v-332fccf4] { height: 600px;\n}\r\n", ""]);
+exports.push([module.i, ".map[data-v-332fccf4] {\n  height: 600px;\n}\r\n", ""]);
 
 // exports
 
@@ -20404,75 +20383,19 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _vm._m(0),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "col-md-3" },
-      _vm._l(_vm.layers, function(layer) {
-        return _c("div", { key: layer.id, staticClass: "form-check" }, [
-          _c("label", { staticClass: "form-check-label" }, [
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: layer.active,
-                  expression: "layer.active"
-                }
-              ],
-              staticClass: "form-check-input",
-              attrs: { type: "checkbox" },
-              domProps: {
-                checked: Array.isArray(layer.active)
-                  ? _vm._i(layer.active, null) > -1
-                  : layer.active
-              },
-              on: {
-                change: [
-                  function($event) {
-                    var $$a = layer.active,
-                      $$el = $event.target,
-                      $$c = $$el.checked ? true : false
-                    if (Array.isArray($$a)) {
-                      var $$v = null,
-                        $$i = _vm._i($$a, $$v)
-                      if ($$el.checked) {
-                        $$i < 0 && _vm.$set(layer, "active", $$a.concat([$$v]))
-                      } else {
-                        $$i > -1 &&
-                          _vm.$set(
-                            layer,
-                            "active",
-                            $$a.slice(0, $$i).concat($$a.slice($$i + 1))
-                          )
-                      }
-                    } else {
-                      _vm.$set(layer, "active", $$c)
-                    }
-                  },
-                  function($event) {
-                    return _vm.layerChanged(layer.id, layer.active)
-                  }
-                ]
-              }
-            }),
-            _vm._v("\n  " + _vm._s(layer.name) + "\n")
-          ])
-        ])
-      }),
-      0
-    )
-  ])
+  return _vm._m(0)
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-9" }, [
-      _c("div", { staticClass: "map", attrs: { id: "map" } })
+    return _c("div", [
+      _c("div", { staticClass: "col-md-9" }, [
+        _c("div", { staticClass: "map", attrs: { id: "map" } })
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-md-3" })
     ])
   }
 ]
@@ -36053,8 +35976,7 @@ __webpack_require__.r(__webpack_exports__);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_3__["default"], vue_axios__WEBPACK_IMPORTED_MODULE_2___default.a, axios__WEBPACK_IMPORTED_MODULE_1___default.a);
 /* harmony default export */ __webpack_exports__["default"] = (new vue_router__WEBPACK_IMPORTED_MODULE_3__["default"]({
   routes: [{
-    path: '/',
-    component: _components_GoogleMap__WEBPACK_IMPORTED_MODULE_6__["default"]
+    path: '/'
   }],
   mode: 'history'
 }));

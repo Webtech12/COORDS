@@ -15,7 +15,6 @@ export default new VueRouter({
     routes: [
         {
             path: '/',
-            component: GoogleMap,
         },
     ],
     mode: 'history'
