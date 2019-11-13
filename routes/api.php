@@ -19,4 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 
 Route::get('getCoordinates', 'Api\getCoordinates@index');
-
+// Route::get('test', function () {
+//     event(new StatusLiked('Someone'));
+//     return "Event has been sent!";
+// });

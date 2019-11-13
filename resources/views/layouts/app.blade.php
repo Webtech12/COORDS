@@ -11,6 +11,7 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
+    {{-- <script src="https://js.pusher.com/5.0/pusher.min.js"></script> --}}
     <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
 
     <!-- Fonts -->
