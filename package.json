@@ -23,7 +23,7 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
-        "fast-json-patch": "^3.0.0-1",
+        "fast-json-patch": "^3.1.1",
         "laravel-echo": "^1.6.1",
         "pusher-js": "^5.0.2",
         "streamdataio-js-sdk": "^2.0.2",
